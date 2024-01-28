@@ -8,6 +8,8 @@ android {
     namespace = "com.buyehou.media"
     compileSdk = 34
 
+    viewBinding.isEnabled = true
+
     defaultConfig {
         applicationId = "com.buyehou.media"
         minSdk = 21
@@ -41,6 +43,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(project(":core"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
