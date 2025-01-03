@@ -1,17 +1,14 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
-    namespace = "com.buyehou.media"
+    namespace = "com.loong.android.media"
     compileSdk = 34
 
-    viewBinding.isEnabled = true
-
     defaultConfig {
-        applicationId = "com.buyehou.media"
+        applicationId = "com.loong.android.media"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
@@ -30,21 +27,22 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
 dependencies {
 
-    implementation(libs.core.ktx)
-    implementation(libs.appcompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(project(":core"))
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

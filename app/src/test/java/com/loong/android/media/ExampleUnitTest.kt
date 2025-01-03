@@ -1,4 +1,4 @@
-package com.buyehou.media
+package com.loong.android.media
 
 import org.junit.Test
 
