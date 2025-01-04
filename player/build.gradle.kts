@@ -38,6 +38,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
 
     api(libs.androidx.media3.seesion)
+    api(libs.androidx.media3.exoplayer)
+    api(libs.androidx.media3.common)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
