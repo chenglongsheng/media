@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.loong.android.media"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.loong.android.media"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
