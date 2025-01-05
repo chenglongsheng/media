@@ -23,3 +23,4 @@ rootProject.name = "media"
 include(":app")
 include(":player")
 include(":common")
+include(":data")
