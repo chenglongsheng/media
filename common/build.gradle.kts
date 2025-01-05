@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.loong.android.media.player"
+    namespace = "com.loong.android.media.common"
     compileSdk = 34
 
     defaultConfig {
@@ -34,14 +34,12 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.startup)
+    api(libs.timber)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-
-    api(libs.androidx.media3.seesion)
-    api(libs.androidx.media3.exoplayer)
-    api(libs.androidx.media3.common)
-    implementation(project(":common"))
-
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
