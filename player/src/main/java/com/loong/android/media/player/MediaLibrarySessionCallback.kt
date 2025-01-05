@@ -2,7 +2,6 @@ package com.loong.android.media.player
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -16,6 +15,7 @@ import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionResult
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.ListenableFuture
+import timber.log.Timber
 
 private const val TAG = "SessionCallback"
 
@@ -28,27 +28,32 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
     ): MediaSession.ConnectionResult {
         val interfaceVersion = controller.interfaceVersion
         val controllerVersion = controller.controllerVersion
-        Log.i(TAG, "onConnect: $session,$controller,$interfaceVersion,$controllerVersion")
+        Timber.tag(TAG).i("onConnect: $session,$controller,$interfaceVersion,$controllerVersion")
         return super.onConnect(session, controller)
     }
 
     override fun onPostConnect(session: MediaSession, controller: MediaSession.ControllerInfo) {
         val interfaceVersion = controller.interfaceVersion
         val controllerVersion = controller.controllerVersion
-        Log.i(TAG, "onPostConnect: $session,$controller,$interfaceVersion,$controllerVersion")
+        Timber.tag(TAG)
+            .i("onPostConnect: $session,$controller,$interfaceVersion,$controllerVersion")
     }
 
     override fun onDisconnected(session: MediaSession, controller: MediaSession.ControllerInfo) {
         val interfaceVersion = controller.interfaceVersion
         val controllerVersion = controller.controllerVersion
-        Log.i(TAG, "onDisconnected: $session,$controller,$interfaceVersion,$controllerVersion")
+        Timber.tag(TAG)
+            .i("onDisconnected: $session,$controller,$interfaceVersion,$controllerVersion")
     }
 
+    @Suppress("DEPRECATION")
+    @Deprecated("Deprecated in Java")
     override fun onPlayerCommandRequest(
         session: MediaSession,
         controller: MediaSession.ControllerInfo,
         playerCommand: Int
     ): Int {
+        Timber.tag(TAG).i("onPlayerCommandRequest: $session,$controller,$playerCommand")
         return super.onPlayerCommandRequest(session, controller, playerCommand)
     }
 
@@ -58,6 +63,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         mediaId: String,
         rating: Rating
     ): ListenableFuture<SessionResult> {
+        Timber.tag(TAG).i("onSetRating: $session,$controller,$mediaId,$rating")
         return super.onSetRating(session, controller, mediaId, rating)
     }
 
@@ -66,6 +72,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         controller: MediaSession.ControllerInfo,
         rating: Rating
     ): ListenableFuture<SessionResult> {
+        Timber.tag(TAG).i("onSetRating: $session,$controller,$rating")
         return super.onSetRating(session, controller, rating)
     }
 
@@ -75,6 +82,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         customCommand: SessionCommand,
         args: Bundle
     ): ListenableFuture<SessionResult> {
+        Timber.tag(TAG).i("onCustomCommand: $session,$controller,$customCommand,$args")
         return super.onCustomCommand(session, controller, customCommand, args)
     }
 
@@ -83,6 +91,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         controller: MediaSession.ControllerInfo,
         mediaItems: MutableList<MediaItem>
     ): ListenableFuture<MutableList<MediaItem>> {
+        Timber.tag(TAG).i("onAddMediaItems: $mediaItems,$controller,$mediaItems")
         return super.onAddMediaItems(mediaSession, controller, mediaItems)
     }
 
@@ -93,6 +102,8 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         startIndex: Int,
         startPositionMs: Long
     ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+        Timber.tag(TAG)
+            .i("onSetMediaItems: $mediaItems,$controller,$mediaItems,$startIndex,$startPositionMs")
         return super.onSetMediaItems(
             mediaSession,
             controller,
@@ -106,6 +117,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         mediaSession: MediaSession,
         controller: MediaSession.ControllerInfo
     ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+        Timber.tag(TAG).i("onPlaybackResumption: $mediaSession,$controller")
         return super.onPlaybackResumption(mediaSession, controller)
     }
 
@@ -114,6 +126,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         controllerInfo: MediaSession.ControllerInfo,
         intent: Intent
     ): Boolean {
+        Timber.tag(TAG).i("onMediaButtonEvent: $session,$controllerInfo,$intent")
         return super.onMediaButtonEvent(session, controllerInfo, intent)
     }
 
@@ -122,6 +135,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         controllerInfo: MediaSession.ControllerInfo,
         playerCommands: Player.Commands
     ) {
+        Timber.tag(TAG).i("onPlayerInteractionFinished: $session,$controllerInfo,$playerCommands")
         super.onPlayerInteractionFinished(session, controllerInfo, playerCommands)
     }
 
@@ -130,6 +144,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         browser: MediaSession.ControllerInfo,
         params: MediaLibraryService.LibraryParams?
     ): ListenableFuture<LibraryResult<MediaItem>> {
+        Timber.tag(TAG).i("onGetLibraryRoot: $session,$browser,$params")
         return super.onGetLibraryRoot(session, browser, params)
     }
 
@@ -138,6 +153,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         browser: MediaSession.ControllerInfo,
         mediaId: String
     ): ListenableFuture<LibraryResult<MediaItem>> {
+        Timber.tag(TAG).i("onGetItem: $session,$browser,$mediaId")
         return super.onGetItem(session, browser, mediaId)
     }
 
@@ -149,6 +165,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         pageSize: Int,
         params: MediaLibraryService.LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        Timber.tag(TAG).i("onGetChildren: $session,$browser,$parentId,$page,$pageSize,$params")
         return super.onGetChildren(session, browser, parentId, page, pageSize, params)
     }
 
@@ -158,6 +175,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         parentId: String,
         params: MediaLibraryService.LibraryParams?
     ): ListenableFuture<LibraryResult<Void>> {
+        Timber.tag(TAG).i("onSubscribe: $session,$browser,$parentId,$params")
         return super.onSubscribe(session, browser, parentId, params)
     }
 
@@ -166,6 +184,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         browser: MediaSession.ControllerInfo,
         parentId: String
     ): ListenableFuture<LibraryResult<Void>> {
+        Timber.tag(TAG).i("onUnsubscribe: $session,$browser,$parentId")
         return super.onUnsubscribe(session, browser, parentId)
     }
 
@@ -175,6 +194,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         query: String,
         params: MediaLibraryService.LibraryParams?
     ): ListenableFuture<LibraryResult<Void>> {
+        Timber.tag(TAG).i("onSearch: $session,$browser,$query,$params")
         return super.onSearch(session, browser, query, params)
     }
 
@@ -186,6 +206,7 @@ class MediaLibrarySessionCallback : MediaLibrarySession.Callback {
         pageSize: Int,
         params: MediaLibraryService.LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        Timber.tag(TAG).i("onGetSearchResult: $session,$browser,$query,$page,$pageSize,$params")
         return super.onGetSearchResult(session, browser, query, page, pageSize, params)
     }
 }

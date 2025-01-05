@@ -3,10 +3,10 @@ package com.loong.android.media.player
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.media3.session.MediaBrowser
 import androidx.media3.session.SessionToken
+import timber.log.Timber
 
 class PlayManager private constructor(context: Context) {
 
@@ -17,18 +17,18 @@ class PlayManager private constructor(context: Context) {
     }
 
     private fun initMediaBrowser(context: Context) {
-        Log.i(TAG, "initMediaBrowser: start")
+        Timber.tag(TAG).i("initMediaBrowser: start")
         val componentName = ComponentName(context, PlaybackService::class.java)
         val sessionToken = SessionToken(context, componentName)
         val future = MediaBrowser.Builder(context, sessionToken)
             .buildAsync()
         future.addListener({
             try {
-                Log.i(TAG, "initMediaBrowser: success")
+                Timber.tag(TAG).i("initMediaBrowser: success")
                 val mediaBrowser = future.get()
                 browser = mediaBrowser
             } catch (e: Exception) {
-                Log.e(TAG, "initMediaBrowser: fail=$e", e)
+                Timber.tag(TAG).e(e, "initMediaBrowser: fail=$e")
             }
         }, ContextCompat.getMainExecutor(context))
     }
