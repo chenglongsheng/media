@@ -29,8 +29,12 @@ androidx-media3-common = { group = "androidx.media3", name = "media3-common", ve
 androidx-startup = "androidx.startup:startup-runtime:1.2.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
 
+agp = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kgp = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+media-android-library = { id = "media.android.library" }
 
