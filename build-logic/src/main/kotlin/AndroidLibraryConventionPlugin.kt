@@ -28,6 +28,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     consumerProguardFiles("consumer-rules.pro")
                 }
 
+                buildFeatures.buildConfig = true
+
                 buildTypes {
                     release {
                         isMinifyEnabled = false
