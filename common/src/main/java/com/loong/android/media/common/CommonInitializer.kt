@@ -11,6 +11,6 @@ class CommonInitializer : Initializer<Unit> {
     }
 
     override fun dependencies(): MutableList<Class<out Initializer<*>>> {
-        return mutableListOf(LoggerInitializer::class.java)
+        return mutableListOf(LogInitializer::class.java)
     }
 }
