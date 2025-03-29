@@ -10,5 +10,6 @@ dependencies {
 
     implementation(libs.androidx.startup)
     api(libs.timber)
+    api(libs.logger)
 
 }

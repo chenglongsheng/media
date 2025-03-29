@@ -28,6 +28,7 @@ androidx-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplaye
 androidx-media3-common = { group = "androidx.media3", name = "media3-common", version.ref = "media3" }
 androidx-startup = "androidx.startup:startup-runtime:1.2.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
+logger = "com.orhanobut:logger:2.2.0"
 
 agp = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kgp = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
