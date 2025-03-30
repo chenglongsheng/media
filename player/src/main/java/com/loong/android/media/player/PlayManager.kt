@@ -6,7 +6,7 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import androidx.media3.session.MediaBrowser
 import androidx.media3.session.SessionToken
-import timber.log.Timber
+import com.loong.android.media.common.TLog
 
 class PlayManager private constructor(context: Context) {
 
@@ -17,25 +17,23 @@ class PlayManager private constructor(context: Context) {
     }
 
     private fun initMediaBrowser(context: Context) {
-        Timber.tag(TAG).i("initMediaBrowser: start")
+        TLog.i("initMediaBrowser: start")
         val componentName = ComponentName(context, PlaybackService::class.java)
         val sessionToken = SessionToken(context, componentName)
         val future = MediaBrowser.Builder(context, sessionToken)
             .buildAsync()
         future.addListener({
             try {
-                Timber.tag(TAG).i("initMediaBrowser: success")
+                TLog.i("initMediaBrowser: success")
                 val mediaBrowser = future.get()
                 browser = mediaBrowser
             } catch (e: Exception) {
-                Timber.tag(TAG).e(e, "initMediaBrowser: fail=$e")
+                TLog.e(e, "initMediaBrowser: fail=$e")
             }
         }, ContextCompat.getMainExecutor(context))
     }
 
     companion object {
-        private const val TAG = "PlayManager"
-
         @SuppressLint("StaticFieldLeak")
         private var instance: PlayManager? = null
 

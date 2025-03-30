@@ -2,13 +2,9 @@ package com.loong.android.media.player
 
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
-import timber.log.Timber
+import com.loong.android.media.common.TLog
 
 class PlaybackService : MediaLibraryService() {
-
-    companion object {
-        private const val TAG = "PlaybackService"
-    }
 
     private var session: MediaLibrarySession? = null
 
@@ -18,13 +14,13 @@ class PlaybackService : MediaLibraryService() {
 
     override fun onCreate() {
         super.onCreate()
-        Timber.tag(TAG).i("onCreate: ")
+        TLog.i("onCreate: ")
         session = MediaLibrarySession.Builder(this, HolderPlayer(), MediaLibrarySessionCallback())
             .build()
     }
 
     override fun onDestroy() {
-        Timber.tag(TAG).i("onDestroy: ")
+        TLog.i("onDestroy: ")
         session = session?.run {
             player.release()
             release()
