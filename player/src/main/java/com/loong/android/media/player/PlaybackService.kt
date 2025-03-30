@@ -15,7 +15,8 @@ class PlaybackService : MediaLibraryService() {
     override fun onCreate() {
         super.onCreate()
         TLog.i("onCreate: ")
-        session = MediaLibrarySession.Builder(this, HolderPlayer(), MediaLibrarySessionCallback())
+        val player = LocalPlayer.get(this.application)
+        session = MediaLibrarySession.Builder(this, player, MediaLibrarySessionCallback())
             .build()
     }
 
