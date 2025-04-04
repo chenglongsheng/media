@@ -11,5 +11,6 @@ dependencies {
     api(libs.androidx.media3.seesion)
     api(libs.androidx.media3.exoplayer)
     api(libs.androidx.media3.common)
+    implementation(libs.androidx.core.ktx)
     implementation(projects.common)
 }

@@ -1,11 +1,9 @@
 import com.android.build.gradle.LibraryExtension
-import com.loong.android.media.libs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
@@ -48,14 +46,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                         jvmTarget.set(JvmTarget.JVM_11)
                     }
                 }
-            }
-
-            dependencies {
-                "implementation"(libs.findLibrary("androidx.core.ktx").get())
-                "implementation"(libs.findLibrary("androidx.appcompat").get())
-                "testImplementation"(libs.findLibrary("junit").get())
-                "androidTestImplementation"(libs.findLibrary("androidx.junit").get())
-                "androidTestImplementation"(libs.findLibrary("androidx.espresso.core").get())
             }
         }
     }
