@@ -1,7 +1,9 @@
 package com.loong.android.media
 
 import android.app.Application
+import android.os.Build
 import com.loong.android.media.common.MediaManager
+import com.loong.android.media.data.MediaStoreManager
 import com.loong.android.media.player.PlayManager
 
 class App : Application() {
@@ -10,6 +12,9 @@ class App : Application() {
         super.onCreate()
         MediaManager.instance.init(this)
         PlayManager.init(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            MediaStoreManager.init()
+        }
     }
 
 }

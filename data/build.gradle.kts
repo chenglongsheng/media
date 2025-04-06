@@ -10,4 +10,5 @@ dependencies {
 
     implementation(projects.common)
     implementation(libs.kotlinx.coroutines)
+    implementation(libs.androidx.annotation)
 }
