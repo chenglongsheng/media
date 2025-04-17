@@ -4,13 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.loong.android.media.ui.event.EventScreen
+import com.loong.android.media.ui.home.HomeScreen
+import com.loong.android.media.ui.model.Route
 import com.loong.android.media.ui.theme.ComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +20,27 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                AppNavHost()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun AppNavHost() {
+    val navController = rememberNavController()
+    NavHost(navController, Route.Home) {
+        composable<Route.Home> {
+            HomeScreen(navController)
+        }
+        composable<Route.Event> {
+            EventScreen(navController)
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    ComposeTheme {
-        Greeting("Android")
-    }
+fun AppPreview() {
+    AppNavHost()
 }
