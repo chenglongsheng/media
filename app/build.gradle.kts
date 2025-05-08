@@ -45,7 +45,7 @@ dependencies {
 
     implementation(projects.player)
     implementation(projects.common)
-    implementation(projects.data)
+    implementation(projects.feature.local)
     implementation(libs.kotlinx.serialization.json)
 
 //    implementation(libs.androidx.lifecycle.livedata)

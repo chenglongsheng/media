@@ -1,4 +1,4 @@
-package com.loong.android.media.data
+package com.loong.android.media.local
 
 import android.content.BroadcastReceiver
 import android.content.Context
