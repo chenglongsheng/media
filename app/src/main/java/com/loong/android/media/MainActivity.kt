@@ -11,7 +11,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.loong.android.media.ui.event.EventScreen
 import com.loong.android.media.ui.home.HomeScreen
+import com.loong.android.media.ui.media.MediaScreen
 import com.loong.android.media.ui.model.Route
+import com.loong.android.media.ui.recorder.RecorderScreen
 import com.loong.android.media.ui.theme.ComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,6 +37,12 @@ fun AppNavHost() {
         }
         composable<Route.Event> {
             EventScreen(navController)
+        }
+        composable<Route.Media> {
+            MediaScreen()
+        }
+        composable<Route.Recorder> {
+            RecorderScreen()
         }
     }
 }

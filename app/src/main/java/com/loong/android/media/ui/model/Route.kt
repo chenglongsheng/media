@@ -8,4 +8,10 @@ sealed interface Route {
 
     @Serializable
     data object Event : Route
+
+    @Serializable
+    data object Media : Route
+
+    @Serializable
+    data object Recorder : Route
 }

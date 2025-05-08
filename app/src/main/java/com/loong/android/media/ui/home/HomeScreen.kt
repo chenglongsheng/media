@@ -20,7 +20,24 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                     Route.Event.toString(),
                     Modifier
                         .padding(8.dp)
-                        .clickable { navController.navigate(Route.Event) })
+                        .clickable { navController.navigate(Route.Event) }
+                )
+            }
+            item {
+                Text(
+                    Route.Media.toString(),
+                    Modifier
+                        .padding(8.dp)
+                        .clickable { navController.navigate(Route.Media) }
+                )
+            }
+            item {
+                Text(
+                    Route.Recorder.toString(),
+                    Modifier
+                        .padding(8.dp)
+                        .clickable { navController.navigate(Route.Recorder) }
+                )
             }
         }
     }
