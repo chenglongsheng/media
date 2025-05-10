@@ -13,4 +13,5 @@ dependencies {
     api(libs.androidx.media3.common)
     implementation(libs.androidx.core.ktx)
     implementation(projects.common)
+    implementation(libs.androidx.lifecycle.livedata.core.ktx)
 }
