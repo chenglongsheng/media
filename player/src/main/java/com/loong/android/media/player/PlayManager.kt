@@ -85,7 +85,6 @@ object PlayManager {
      */
     fun play() = postOrRun {
         browser?.play()
-
     }
 
     /**
@@ -93,7 +92,6 @@ object PlayManager {
      */
     fun pause() = postOrRun {
         browser?.pause()
-
     }
 
     /**
@@ -101,7 +99,6 @@ object PlayManager {
      */
     fun stop() = postOrRun {
         browser?.stop()
-
     }
 
     /**
@@ -109,7 +106,6 @@ object PlayManager {
      */
     fun prev() = postOrRun {
         browser?.seekToPrevious()
-
     }
 
     /**
@@ -117,7 +113,6 @@ object PlayManager {
      */
     fun next() = postOrRun {
         browser?.seekToNext()
-
     }
 
     /**
