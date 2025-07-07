@@ -13,7 +13,7 @@ class MediaReceiver : BroadcastReceiver() {
         TLog.i("onReceive: ${intent.action}, ${intent.dataString}")
         when (intent.action) {
             Intent.ACTION_MEDIA_MOUNTED -> {
-                MediaStoreManager.onMounted(intent.dataString)
+
             }
 
             else -> {}

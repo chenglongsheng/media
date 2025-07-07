@@ -1,59 +1,86 @@
 package com.loong.android.media.local
 
-import android.content.Intent
-import android.content.IntentFilter
+import android.Manifest
+import android.content.ContentResolver
+import android.content.pm.PackageManager
 import android.database.Cursor
+import android.net.Uri
 import android.os.Build
-import android.os.Environment
+import android.os.CancellationSignal
 import android.provider.MediaStore
-import androidx.core.net.toUri
+import androidx.core.content.ContextCompat
 import androidx.media3.common.MediaMetadata
 import com.loong.android.media.common.ContextSupplier
 import com.loong.android.media.common.TLog
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * 媒体存储管理器
  */
 object MediaStoreManager {
 
+    private val context by lazy { ContextSupplier.get().applicationContext }
+
+    /**
+     * 查询音频字段
+     */
     private val audioProjection = arrayOf(
         MediaStore.Audio.Media._ID,
         MediaStore.Audio.Media.TITLE,
         MediaStore.Audio.Media.ARTIST,
         MediaStore.Audio.Media.ALBUM,
-        MediaStore.Audio.Media.DURATION,
         MediaStore.Audio.Media.DATA
     )
 
-    fun init() {
-        val intentFilter = IntentFilter().apply {
-            addAction(Intent.ACTION_MEDIA_MOUNTED)
-            addAction(Intent.ACTION_MEDIA_EJECT)
-            addDataScheme("file")
+    /**
+     * 检查访问存储权限
+     */
+    fun assertReadPermission() {
+        val granted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_MEDIA_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_MEDIA_VIDEO
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
         }
-        ContextSupplier.get().registerReceiver(MediaReceiver(), intentFilter)
-
-        val file = Environment.getExternalStorageDirectory()
-        TLog.i("init: $file")
-        if (file != null) {
-            CoroutineScope(Dispatchers.IO).launch {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                }
-            }
-        }
+        if (!granted) throw Exception("have not read storage permission")
     }
 
-    /**
-     * 挂载卷
-     */
-    internal fun onMounted(data: String?) {
-        TLog.i("onMounted: $data")
-        ContextSupplier.get()
+    suspend inline fun <R> ContentResolver.queryCancellable(
+        uri: Uri,
+        projection: Array<String>? = null,
+        selection: String? = null,
+        selectionArgs: Array<String>? = null,
+        sortOrder: String? = null,
+        crossinline action: Cursor.() -> R?
+    ): R? = suspendCancellableCoroutine { cont ->
+        try {
+            assertReadPermission()
+            val cancellationSignal = CancellationSignal()
+            cont.invokeOnCancellation { cancellationSignal.cancel() }
+            val cursor =
+                query(uri, projection, selection, selectionArgs, sortOrder, cancellationSignal)
+            val r = cursor?.action()
+            cursor?.close()
+            cont.resume(r)
+        } catch (e: Exception) {
+            cont.resumeWithException(e)
+        }
     }
 
     /**
@@ -61,10 +88,9 @@ object MediaStoreManager {
      */
     suspend fun queryAllAudios() = withContext(Dispatchers.IO) {
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        ContextSupplier.get()
-            .contentResolver
-            .query(uri, audioProjection, null, null, null)
-            ?.use { it.cursorToMediaMetadata() }
+        context.contentResolver.queryCancellable(uri, audioProjection) {
+            cursorToMediaMetadata()
+        }
     }
 
     /**
@@ -74,10 +100,9 @@ object MediaStoreManager {
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val selection = "${MediaStore.Audio.Media.VOLUME_NAME} = ?"
         val args = arrayOf(volumeName.lowercase())
-        ContextSupplier.get()
-            .contentResolver
-            .query(uri, audioProjection, selection, args, null)
-            ?.use { it.cursorToMediaMetadata() }
+        context.contentResolver.queryCancellable(uri, audioProjection, selection, args) {
+            cursorToMediaMetadata()
+        }
     }
 
     /**
@@ -93,10 +118,10 @@ object MediaStoreManager {
     """.trimIndent()
 
         val args = arrayOf("$normalizedPath%", normalizedPath)
-        ContextSupplier.get()
-            .contentResolver
-            .query(uri, audioProjection, selection, args, null)
-            ?.use { it.cursorToMediaMetadata() }
+        context.contentResolver
+            .queryCancellable(uri, audioProjection, selection, args) {
+                cursorToMediaMetadata()
+            }
     }
 
     private fun Cursor.cursorToMediaMetadata(): List<MediaMetadata>? {
@@ -104,7 +129,6 @@ object MediaStoreManager {
             val titleColumn = getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
             val artistColumn = getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
             val albumColum = getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
-            val durationColum = getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
             val pathColumn = getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
 
             if (count == 0) return emptyList()
@@ -119,13 +143,11 @@ object MediaStoreManager {
                 val title = getString(titleColumn)
                 val artist = getString(artistColumn)
                 val album = getString(albumColum)
-                val duration = getInt(durationColum)
                 list += MediaMetadata.Builder()
                     .setTitle(title)
                     .setArtist(artist)
                     .setAlbumTitle(album)
-                    .setDurationMs(duration.toLong())
-                    .setArtworkUri(file.toUri())
+                    .setDescription(path)
                     .build()
             }
             return list
