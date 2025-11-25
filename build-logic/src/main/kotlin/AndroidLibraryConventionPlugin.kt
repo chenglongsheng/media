@@ -17,10 +17,12 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             apply(plugin = "org.jetbrains.kotlin.android")
 
             configure<LibraryExtension> {
-                compileSdk = 35
+                compileSdk {
+                    version = release(36)
+                }
 
                 defaultConfig {
-                    minSdk = 21
+                    minSdk = 28
 
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     consumerProguardFiles("consumer-rules.pro")

@@ -7,12 +7,14 @@ plugins {
 
 android {
     namespace = "com.loong.android.media"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk {
+        version = release(36)
+    }
 
     defaultConfig {
         applicationId = "com.loong.android.media"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        minSdk = 28
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
