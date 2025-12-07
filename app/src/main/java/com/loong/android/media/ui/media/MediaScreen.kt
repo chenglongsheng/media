@@ -8,5 +8,5 @@ import androidx.compose.ui.Modifier
  */
 @Composable
 fun MediaScreen(modifier: Modifier = Modifier) {
-
+    LrcPlayerScreen()
 }
