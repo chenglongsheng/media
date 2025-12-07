@@ -8,7 +8,7 @@ import android.media.MediaMetadataRetriever
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.loong.android.media.local.db.AudioDao
-import com.loong.android.media.local.model.UsbAudioEntity
+import com.loong.android.media.local.model.AudioEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,7 +30,7 @@ class UsbModule(private val audioDao: AudioDao) {
     }
 
     private lateinit var app: Context
-    private val scanner = UsbScanner()
+    private val scanner = AudioScanner()
 
     // 全局协程作用域
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -48,7 +48,7 @@ class UsbModule(private val audioDao: AudioDao) {
     @OptIn(ExperimentalCoroutinesApi::class)
     private val metadataDispatcher = Dispatchers.Default.limitedParallelism(2)
 
-    val allSongs: Flow<List<UsbAudioEntity>> = audioDao.getAllAudio()
+    val allSongs: Flow<List<AudioEntity>> = audioDao.getAllAudio()
 
     fun initialize(context: Context) {
         app = context.applicationContext
@@ -161,7 +161,7 @@ class UsbModule(private val audioDao: AudioDao) {
                         retriever.setDataSource(entity.path)
                         val title =
                             retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
-                                ?: entity.fileName
+                                ?: entity.path
                         val artist =
                             retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
                         val duration =
@@ -172,7 +172,12 @@ class UsbModule(private val audioDao: AudioDao) {
                     } catch (_: Exception) {
                         // 可能是文件损坏或中途拔出
                         Log.w(TAG, "Meta fail: ${entity.path}")
-                        audioDao.updateMetadata(entity.path, entity.fileName, null, 0)
+                        audioDao.updateMetadata(
+                            entity.path,
+                            entity.path.substringBeforeLast('.'),
+                            null,
+                            0
+                        )
                     }
 
                     processedCount++

@@ -2,7 +2,7 @@ package com.loong.android.media.local
 
 import android.util.Log
 import android.webkit.MimeTypeMap
-import com.loong.android.media.local.model.UsbAudioEntity
+import com.loong.android.media.local.model.AudioEntity
 import java.io.IOException
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -11,25 +11,27 @@ import java.nio.file.Paths
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import kotlin.io.path.extension
-import kotlin.io.path.name
 
-class UsbScanner() {
+/**
+ * 音频扫描器
+ */
+class AudioScanner() {
 
     companion object {
-        private const val TAG = "UsbScanner"
+        private const val TAG = "AudioScanner"
     }
 
     /**
      * 极速扫描：只返回文件对象，不读取 ID3
      * @param rootPath USB 挂载根目录 (例如 /storage/1234-5678)
      */
-    fun scanFiles(rootPath: String): List<UsbAudioEntity> {
+    fun scanFiles(rootPath: String): List<AudioEntity> {
         val startPath = Paths.get(rootPath)
         if (!Files.exists(startPath)) {
             return emptyList()
         }
 
-        val audioFiles = mutableListOf<UsbAudioEntity>()
+        val audioFiles = mutableListOf<AudioEntity>()
 
         try {
             Files.walkFileTree(startPath, object : SimpleFileVisitor<Path>() {
@@ -38,7 +40,7 @@ class UsbScanner() {
                     val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
                     if (mimeType?.startsWith("audio") == true) {
                         val absPath = file.toAbsolutePath().toString()
-                        audioFiles.add(UsbAudioEntity(path = absPath, fileName = file.name))
+                        audioFiles.add(AudioEntity(absPath))
                     }
                     return FileVisitResult.CONTINUE
                 }
