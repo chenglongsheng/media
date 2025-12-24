@@ -14,4 +14,7 @@ sealed interface Route {
 
     @Serializable
     data object Recorder : Route
+
+    @Serializable
+    data object Monitor : Route
 }

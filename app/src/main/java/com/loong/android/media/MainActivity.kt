@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,6 +14,7 @@ import com.loong.android.media.ui.event.EventScreen
 import com.loong.android.media.ui.home.HomeScreen
 import com.loong.android.media.ui.media.MediaScreen
 import com.loong.android.media.ui.model.Route
+import com.loong.android.media.ui.monitor.CpuMonitorScreen
 import com.loong.android.media.ui.recorder.RecorderScreen
 import com.loong.android.media.ui.theme.ComposeTheme
 
@@ -31,9 +33,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
+    val routes =
+        remember { mutableListOf(Route.Event, Route.Media, Route.Recorder, Route.Monitor) }
     NavHost(navController, Route.Home) {
         composable<Route.Home> {
-            HomeScreen(navController)
+            HomeScreen(navController, routes = routes)
         }
         composable<Route.Event> {
             EventScreen(navController)
@@ -43,6 +47,9 @@ fun AppNavHost() {
         }
         composable<Route.Recorder> {
             RecorderScreen()
+        }
+        composable<Route.Monitor> {
+            CpuMonitorScreen()
         }
     }
 }

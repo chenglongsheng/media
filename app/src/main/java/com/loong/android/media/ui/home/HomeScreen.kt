@@ -3,6 +3,7 @@ package com.loong.android.media.ui.home
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,31 +13,15 @@ import androidx.navigation.NavController
 import com.loong.android.media.ui.model.Route
 
 @Composable
-fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun HomeScreen(navController: NavController, modifier: Modifier = Modifier, routes: List<Route>) {
     Scaffold {
         LazyColumn(modifier.padding(it)) {
-            item {
+            items(routes, { item -> item.toString() }) { route ->
                 Text(
-                    Route.Event.toString(),
+                    route.toString(),
                     Modifier
                         .padding(8.dp)
-                        .clickable { navController.navigate(Route.Event) }
-                )
-            }
-            item {
-                Text(
-                    Route.Media.toString(),
-                    Modifier
-                        .padding(8.dp)
-                        .clickable { navController.navigate(Route.Media) }
-                )
-            }
-            item {
-                Text(
-                    Route.Recorder.toString(),
-                    Modifier
-                        .padding(8.dp)
-                        .clickable { navController.navigate(Route.Recorder) }
+                        .clickable { navController.navigate(route) }
                 )
             }
         }
